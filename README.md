@@ -15,5 +15,6 @@ the reliability percentage that varies somewhere between LLMs (lower bound) and 
 
 ## Subsections
 [Dynamic Programming](https://github.com/chandrakanth-c/patterns-in-algorithms/tree/main/dynamic-programming)
+[TBD] Divide And Conquer
 
 [TBD]
