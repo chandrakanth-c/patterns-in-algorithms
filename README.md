@@ -9,7 +9,7 @@ The intention of making this github repo `public` is just to provide a compresse
 based on the current viable source of thruths (geeksforgeeks.com, stackoverflow.com etc) on the internet and based on conversations with 
 LLMs (chatgpt,gemini,claude etc) which is some percent true. 
 
-## Goal
+## Personal goals for this repo to grow
 ### Final goal 
 
 is to reach a spot where this repository would provide more than 90% reliable source of information and can be rapidly 
