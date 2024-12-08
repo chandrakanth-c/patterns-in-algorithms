@@ -14,5 +14,6 @@ LLMs (chatgpt,gemini,claude etc) which is some percent true. Hence, this repo wo
 the reliability percentage that varies somewhere between LLMs (lower bound) and popular articles on the internet.
 
 ## Subsections
+[Dynamic Programming](https://github.com/chandrakanth-c/patterns-in-algorithms/tree/main/dynamic-programming)
 
 [TBD]
