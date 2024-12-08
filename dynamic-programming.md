@@ -1,6 +1,6 @@
 # Dynamic Programming (DP) - [Status:needs several updation / not ready yet]
 
-## Sources filtered/used:
+## Sources for this section:
 (i) https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
 (ii) https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-programing
 
@@ -18,7 +18,7 @@
 
 ## Overlapping Subproblem Property
 
-### Sources filtered/used:
+### Sources for this section:
 (i) https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-programming-dp-1/
 
 ### Overview
