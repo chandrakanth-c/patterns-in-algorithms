@@ -23,7 +23,9 @@
 
 ### Overview
 
-Consider a java `finding a fibonacci java code` (sourced from the above mentioned link) below:
+Consider a java `finding a fibonacci series F(n) java code` (sourced from the above mentioned link) below:
+
+F(n)=F(n-1)+F(n-2), where n>1
 
 ```
 static int fib(int n)
