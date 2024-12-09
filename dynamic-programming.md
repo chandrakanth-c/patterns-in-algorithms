@@ -1,4 +1,4 @@
-# 1 - Dynamic Programming (DP) - [Status:needs several updation / not ready yet]
+# 1 - Dynamic Programming (DP) 
 
 ## 1.1 - Sources for this section:
 https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
