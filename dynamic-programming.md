@@ -1,26 +1,26 @@
-# Dynamic Programming (DP) - [Status:needs several updation / not ready yet]
+# 1 - Dynamic Programming (DP) - [Status:needs several updation / not ready yet]
 
-## Sources for this section:
+## 1.1 - Sources for this section:
 https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
 https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-programing
 
-## Overview
+## 1.2 - Overview
 
 * solves a given complex problem by breaking it into subproblems using recursions and storing the results of subproblems to avoid computing the same results again. <br>
 * like [divide and conquer](https://github.com/chandrakanth-c/patterns-in-algorithms/blob/main/divide-and-conquer.md) DP combines solutions to sub-problems.  
 
-## Properties of a problem that suggests that it is a DP problem
+## 1.3 - Properties of a problem that suggests that it is a DP problem
 
 2 main properties of a problem tha suggests that the given problem can be solved using DP are: <br>
 * Overlapping Subproblems <br>
 * Optimal Substructure 
 
-## Overlapping Subproblem Property
+## 1.4 - Overlapping Subproblem Property
 
-### Sources for this section:
+### 1.4.1 - Sources for this section:
 https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-programming-dp-1/
 
-### Overview
+### 1.4.2 - Overview
 
 Consider a java `finding a fibonacci series F(n) java code` (sourced from the above mentioned link) below:
 
@@ -51,7 +51,7 @@ The different ways to store these values of subproblems are:
 * Memoization (Top Down)
 * Tabulation (Bottom Up)
 
-### Memoization (Top Down)
+### 1.4.3 - Memoization (Top Down)
 
 In the recursive version, use a global cache (to the class) either in the form of an 
 array (with default value as -1) or using a Map. 
@@ -78,7 +78,7 @@ static int fib(int n)
 ```
 Now, using memoization we have reduced the time complexity from O(2^n) to O(n).
 
-### Tabulation (Bottom Up)
+### 1.4.4 - Tabulation (Bottom Up)
 
 Tabulation approach fills all the values returned by subproblems in a bottom-up fashion
 in an array (or a map) and return n(th) subproblem result.
@@ -98,6 +98,30 @@ static int fib(int n)
     return res[n];
 }
 ```
+
+## 1.5 - Optimal Substructure Property
+
+### 1.5.1 - Sources
+https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/
+
+### 1.5.2 - Overview
+
+* Optimal Substructure Property problems, like `Overlapping Subproblem Property`,
+uses recursion to find compute solutions for each subproblem but would optimise a result
+value in each recursion iteration.
+* Finding either max or min of all the solutions of the sub problems.
+* For example, `find shortest path` problem calculates min of all the paths that are
+calculated in each iteration.
+
+
+
+
+
+
+
+
+
+
 
 
 
