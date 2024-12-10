@@ -1,10 +1,4 @@
 # 1 - Dynamic Programming (DP) 
-
-## 1.1 - Sources for this section:
-https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
-https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-programing
-https://en.wikipedia.org/wiki/Recursion_(computer_science)
-
 ## 1.2 - Overview
 
 * [Recursion](https://en.wikipedia.org/wiki/Recursion_(computer_science)) is the prerequisite for this topic.
@@ -19,10 +13,6 @@ https://en.wikipedia.org/wiki/Recursion_(computer_science)
 * Optimal Substructure 
 
 ## 1.4 - Overlapping Subproblem Property
-
-### 1.4.1 - Sources for this section:
-https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-programming-dp-1/
-
 ### 1.4.2 - Overview
 
 Consider a `finding a fibonacci series F(n) java code` (sourced from the above mentioned link) below:
@@ -107,10 +97,6 @@ static int fib(int n)
 The TC and SP is indentical to Memoization (1.4.3) approach.
 
 ## 1.5 - Optimal Substructure Property
-
-### 1.5.1 - Sources
-https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/
-
 ### 1.5.2 - Overview
 
 * Optimal Substructure Property problems, like `Overlapping Subproblem Property`,
@@ -120,6 +106,13 @@ value in each recursion iteration.
 * For example, `find shortest path` problem calculates min of all the paths that are
 calculated in each iteration.
 
+## 1.5 - Sources used for this file:
+https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
+https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-programing <br>
+https://en.wikipedia.org/wiki/Recursion_(computer_science) <br>
+https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-programming-dp-1/ <br>
+https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
+https://github.com/chandrakanth-c/patterns-in-algorithms/blob/main/divide-and-conquer.md
 
 
 
