@@ -1,4 +1,4 @@
-> NOTE : I do not claim any rights to the content in this [repository](https://github.com/chandrakanth-c/patterns-in-algorithms/tree/main). 
+> NOTE : I do not claim any rights to the content in [this repository](https://github.com/chandrakanth-c/patterns-in-algorithms/tree/main). 
 >
 > All sources will be listed in every file with due diligence.
 > For LLM sources - provider (gemini,chatgpt,claude etc) will
