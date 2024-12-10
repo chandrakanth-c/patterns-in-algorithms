@@ -41,9 +41,9 @@ static int fib(int n)
 }
 ```
 
-In the above code, time complexity is exponential / O(2^n) and space complexity is linear / O(1). 
+In the above code, time complexity (TC) is exponential / O(2^n) and space complexity (SP) is linear / O(1). 
 
-The reduce the time complexity we can store the subresults value (here it is of the form int). 
+The reduce the TC we can store the subresults value (here it is of the form int). 
 For example, if we consider F(5)=F(4)+F(3), in this we can see that F(3) is computed while computing 
 F(4) and is computed while computing F(3).
 
@@ -76,7 +76,9 @@ static int fib(int n)
     return subResult;
 }
 ```
-Now, using memoization we have reduced the time complexity from O(2^n) to O(n).
+Now, using memoization we have reduced the TC from O(2^n) to O(n). 
+However, SP has been increased from O(1) to O(n). I guess it's a 
+fair traidoff!
 
 ### 1.4.4 - Tabulation (Bottom Up)
 
@@ -98,6 +100,8 @@ static int fib(int n)
     return res[n];
 }
 ```
+
+The TC and SP is indentical to Memoization (1.4.3) approach.
 
 ## 1.5 - Optimal Substructure Property
 
