@@ -6,8 +6,8 @@ https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-pro
 
 ## 1.2 - Overview
 
-* solves a given complex problem by breaking it into subproblems using recursions and storing the results of subproblems to avoid computing the same results again. <br>
-* like [divide and conquer](https://github.com/chandrakanth-c/patterns-in-algorithms/blob/main/divide-and-conquer.md) DP combines solutions to sub-problems.  
+* Solves a given complex problem by breaking it into subproblems using recursions and storing the results of subproblems to avoid computing the same results again. <br>
+* Like [divide and conquer](https://github.com/chandrakanth-c/patterns-in-algorithms/blob/main/divide-and-conquer.md) DP combines solutions to sub-problems.  
 
 ## 1.3 - Properties of a problem that suggests that it is a DP problem
 
