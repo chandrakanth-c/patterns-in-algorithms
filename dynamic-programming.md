@@ -22,7 +22,7 @@ https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-progra
 
 ### 1.4.2 - Overview
 
-Consider a java `finding a fibonacci series F(n) java code` (sourced from the above mentioned link) below:
+Consider a `finding a fibonacci series F(n) java code` (sourced from the above mentioned link) below:
 
 F(n)=F(n-1)+F(n-2), where n>1, n=0 F(0)=0, n=1 F(1)=1 <br>
 F(2)=F(1)+F(0)=1 <br>
