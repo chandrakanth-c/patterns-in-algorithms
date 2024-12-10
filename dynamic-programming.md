@@ -11,7 +11,7 @@ https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-pro
 
 ## 1.3 - Properties of a problem that suggests that it is a DP problem
 
-2 main properties of a problem tha suggests that the given problem can be solved using DP are: <br>
+2 main properties of a problem that suggests that the given problem can be solved using DP are: <br>
 * Overlapping Subproblems <br>
 * Optimal Substructure 
 
