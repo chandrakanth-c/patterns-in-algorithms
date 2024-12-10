@@ -3,9 +3,12 @@
 ## 1.1 - Sources for this section:
 https://www.geeksforgeeks.org/optimal-substructure-property-in-dynamic-programming-dp-2/ <br>
 https://stackoverflow.com/questions/33563230/optimal-substructure-in-dynamic-programing
+https://en.wikipedia.org/wiki/Recursion_(computer_science)
 
 ## 1.2 - Overview
 
+* [Recursion](https://en.wikipedia.org/wiki/Recursion_(computer_science)) is the prerequisite for this topic.
+* DP just provides a hook to optimise recursion, mainly by two ways (1 - bottom up) storing it in a cache or (2 - top down) in some form of tabulation computation. 
 * Solves a given complex problem by breaking it into subproblems using recursions and storing the results of subproblems to avoid computing the same results again. <br>
 * Like [divide and conquer](https://github.com/chandrakanth-c/patterns-in-algorithms/blob/main/divide-and-conquer.md) DP combines solutions to sub-problems.  
 
