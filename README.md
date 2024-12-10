@@ -2,7 +2,7 @@
 >
 > All sources will be listed at the top of every section with due diligence.
 > For LLM sources - provider (gemini,chatgpt,claude etc) will
-> be mentioned and a doc will be liked that has the pasted
+> be mentioned and a doc will be linked that has the pasted
 > conversation with LLMs regarding the topic.
 
 Links to individual topics:
