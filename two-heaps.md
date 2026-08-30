@@ -1,19 +1,22 @@
 # 13 - Two Heaps (Median of a Stream)
 
-## 13.1 - Overview
+## 13.1 - Overview & Theoretical Foundations (CLRS Chapter 6)
 
-* The **Two Heaps** pattern uses two priority queues to divide an unsorted dataset into two balanced halves:
-  1. **Max-Heap:** Stores the smaller half of numbers (the root is the maximum of the small half).
-  2. **Min-Heap:** Stores the larger half of numbers (the root is the minimum of the large half).
-* By maintaining size balance ($\text{maxHeap.size} == \text{minHeap.size}$ or $\text{maxHeap.size} == \text{minHeap.size} + 1$), the median is always available in $\mathcal{O}(1)$ time.
+* The **Two Heaps** pattern partitions a dynamic, incoming stream of real-time numbers into two balanced halves:
+  1. **Max-Heap ($H_{\text{low}}$):** Stores the lower half of numbers (the root is $\max(H_{\text{low}})$).
+  2. **Min-Heap ($H_{\text{high}}$):** Stores the upper half of numbers (the root is $\min(H_{\text{high}})$).
+* **Heap Invariants:**
+  * **Order Invariant:** Every element in $H_{\text{low}}$ is less than or equal to every element in $H_{\text{high}}$: $\max(H_{\text{low}}) \le \min(H_{\text{high}})$.
+  * **Size Invariant:** Either $|H_{\text{low}}| = |H_{\text{high}}|$ (when total elements $N$ is even), or $|H_{\text{low}}| = |H_{\text{high}}| + 1$ (when $N$ is odd).
+* When invariants hold, the median is calculated in $\mathcal{O}(1)$ time:
+  $$\text{Median} = \begin{cases} \max(H_{\text{low}}) & \text{if } |H_{\text{low}}| > |H_{\text{high}}| \\ \frac{\max(H_{\text{low}}) + \min(H_{\text{high}})}{2.0} & \text{if } |H_{\text{low}}| = |H_{\text{high}}| \end{cases}$$
 
 ---
 
 ## 13.2 - Properties of a problem that suggests Two Heaps
 
-* You are given a continuous stream of data and need to calculate the **median** dynamically.
-* You need to track the smallest and largest elements simultaneously in fluctuating datasets.
-* Sliding window median or dynamic percentile calculations.
+* Finding the **median** or split-percentiles dynamically in a stream where numbers are constantly inserted.
+* Real-time tracking of two extreme boundaries of a partition.
 
 ---
 
@@ -26,8 +29,8 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 
 public class MedianFinder {
-    private PriorityQueue<Integer> maxHeap; // stores smaller half
-    private PriorityQueue<Integer> minHeap; // stores larger half
+    private PriorityQueue<Integer> maxHeap; // Lower half
+    private PriorityQueue<Integer> minHeap; // Upper half
 
     public MedianFinder() {
         maxHeap = new PriorityQueue<>(Collections.reverseOrder());
@@ -41,7 +44,7 @@ public class MedianFinder {
             minHeap.offer(num);
         }
 
-        // Rebalance heaps: maxHeap can have at most 1 more element than minHeap
+        // Rebalance size invariant
         if (maxHeap.size() > minHeap.size() + 1) {
             minHeap.offer(maxHeap.poll());
         } else if (minHeap.size() > maxHeap.size()) {
@@ -60,15 +63,92 @@ public class MedianFinder {
 
 ---
 
-## 13.4 - Time & Space Complexity
+### Go Implementation
 
-* **`addNum()`:** $\mathcal{O}(\log n)$ because insertion and rebalancing perform heap push/pop operations.
-* **`findMedian()`:** $\mathcal{O}(1)$ because the roots of the heaps are accessed directly via `.peek()`.
-* **Space Complexity:** $\mathcal{O}(n)$ to store all incoming stream elements.
+```go
+package main
+
+import (
+	"container/heap"
+)
+
+// IntMaxHeap implements max-heap of ints
+type IntMaxHeap []int
+func (h IntMaxHeap) Len() int           { return len(h) }
+func (h IntMaxHeap) Less(i, j int) bool { return h[i] > h[j] } // Reverse for max-heap
+func (h IntMaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *IntMaxHeap) Push(x any)        { *h = append(*h, x.(int)) }
+func (h *IntMaxHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+// IntMinHeap implements min-heap of ints
+type IntMinHeap []int
+func (h IntMinHeap) Len() int           { return len(h) }
+func (h IntMinHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h IntMinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *IntMinHeap) Push(x any)        { *h = append(*h, x.(int)) }
+func (h *IntMinHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+type MedianFinder struct {
+	maxHeap *IntMaxHeap
+	minHeap *IntMinHeap
+}
+
+func Constructor() MedianFinder {
+	maxH := &IntMaxHeap{}
+	minH := &IntMinHeap{}
+	heap.Init(maxH)
+	heap.Init(minH)
+	return MedianFinder{maxHeap: maxH, minHeap: minH}
+}
+
+func (mf *MedianFinder) AddNum(num int) {
+	if mf.maxHeap.Len() == 0 || num <= (*mf.maxHeap)[0] {
+		heap.Push(mf.maxHeap, num)
+	} else {
+		heap.Push(mf.minHeap, num)
+	}
+
+	// Rebalance
+	if mf.maxHeap.Len() > mf.minHeap.Len()+1 {
+		val := heap.Pop(mf.maxHeap).(int)
+		heap.Push(mf.minHeap, val)
+	} else if mf.minHeap.Len() > mf.maxHeap.Len() {
+		val := heap.Pop(mf.minHeap).(int)
+		heap.Push(mf.maxHeap, val)
+	}
+}
+
+func (mf *MedianFinder) FindMedian() double {
+	if mf.maxHeap.Len() == mf.minHeap.Len() {
+		return float64((*mf.maxHeap)[0]+(*mf.minHeap)[0]) / 2.0
+	}
+	return float64((*mf.maxHeap)[0])
+}
+```
 
 ---
 
-## 13.5 - Classic LeetCode Problems
+## 13.4 - Time & Space Complexity Analysis
+
+* **`addNum(num)`:** $\mathcal{O}(\log n)$ time due to heap insertion and balance operations.
+* **`findMedian()`:** $\mathcal{O}(1)$ direct lookup of heap roots.
+* **Space Complexity:** $\mathcal{O}(n)$ to hold the stream values.
+
+---
+
+## 13.5 - Classic LeetCode & CLRS Benchmarks
 
 * **Find Median from Data Stream** (LeetCode #295)
 * **Sliding Window Median** (LeetCode #480)
@@ -77,7 +157,7 @@ public class MedianFinder {
 ---
 
 ## 13.6 - Sources used for this file:
-https://leetcode.com/problems/find-median-from-data-stream/ <br>
-https://www.designgurus.io/course-play/grokking-the-coding-interview/doc/6385d4f308d2bb2d978e29a4 <br>
-https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/ <br>
-https://techinterviewhandbook.org/algorithms/heap/
+* **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022).** *Introduction to Algorithms (4th ed.)*. MIT Press.
+  * Chapter 6: Heapsort & Priority Queues (pp. 161–181)
+* https://leetcode.com/problems/find-median-from-data-stream/
+* https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/

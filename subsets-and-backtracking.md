@@ -1,20 +1,20 @@
 # 15 - Subsets, Permutations & Backtracking
 
-## 15.1 - Overview
+## 15.1 - Overview & Theoretical Foundations (CLRS Appendix C & Chapter 34)
 
-* **Backtracking** is a general algorithmic technique for finding all (or some) solutions to computational problems incrementally, one piece at a time, removing solutions that fail to satisfy constraints at any point in time ("backtracking").
-* Useful for generating the combinatorial search space:
-  * **Subsets (Power Set):** $2^n$ combinations (choose or don't choose).
-  * **Permutations:** $n!$ orderings of elements.
-  * **Combinations:** Subsets of a fixed length $k$.
+* **Backtracking** is a systematic method for iterating through all possible configurations of a search space (state-space tree).
+* It builds candidates incrementally and abandons a candidate ("backtracks") as soon as it determines that the candidate cannot possibly be extended to a valid solution.
+* **Combinatorial Structures:**
+  1. **Subsets (Power Set):** Size is $2^n$. At each index $i$, binary decision: include $A[i]$ or exclude $A[i]$.
+  2. **Permutations:** Size is $n!$. Order matters; maintain a visited state or swap-based selection across remaining elements.
+  3. **Combinations:** Size is $\binom{n}{k} = \frac{n!}{k!(n-k)!}$. Fixed-length subset selections.
 
 ---
 
 ## 15.2 - Properties of a problem that suggests Backtracking
 
-* Asked to find **all combinations**, **all permutations**, or **all valid paths/configurations**.
-* The problem asks to solve a constraint satisfaction puzzle (e.g. Sudoku, N-Queens, Word Search).
-* The brute-force requires exploring a state-space tree.
+* Generating all valid arrangements, partitions, or assignments.
+* Constraint satisfaction problems where pruning early cuts down exponential exploration (e.g. Sudoku, N-Queens).
 
 ---
 
@@ -35,17 +35,17 @@ public class SubsetsBacktracking {
     }
 
     private static void backtrack(List<List<Integer>> result, List<Integer> currentList, int[] nums, int start) {
-        // Add a copy of the current subset to result
+        // Add snapshot of the current state to result
         result.add(new ArrayList<>(currentList));
 
         for (int i = start; i < nums.length; i++) {
-            // 1. Choose
+            // 1. Choose candidate
             currentList.add(nums[i]);
 
-            // 2. Explore
+            // 2. Explore deeper state
             backtrack(result, currentList, nums, i + 1);
 
-            // 3. Un-choose (Backtrack)
+            // 3. Unchoose / Backtrack to restore previous state
             currentList.remove(currentList.size() - 1);
         }
     }
@@ -54,23 +54,58 @@ public class SubsetsBacktracking {
 
 ---
 
-## 15.4 - Time & Space Complexity
+### Go Implementation
 
-* **Subsets:**
-  * **Time Complexity:** $\mathcal{O}(n \cdot 2^n)$ because there are $2^n$ subsets and copying each subset takes $\mathcal{O}(n)$ time.
-  * **Space Complexity:** $\mathcal{O}(n)$ recursion call stack space.
-* **Permutations:**
-  * **Time Complexity:** $\mathcal{O}(n \cdot n!)$
-  * **Space Complexity:** $\mathcal{O}(n)$ recursion depth.
+```go
+package main
+
+// Subsets generates all possible subsets (the power set) of nums
+func Subsets(nums []int) [][]int {
+	var result [][]int
+	var current []int
+
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		// Snapshot current subset
+		subsetCopy := make([]int, len(current))
+		copy(subsetCopy, current)
+		result = append(result, subsetCopy)
+
+		for i := start; i < len(nums); i++ {
+			// Choose
+			current = append(current, nums[i])
+
+			// Explore
+			backtrack(i + 1)
+
+			// Backtrack
+			current = current[:len(current)-1]
+		}
+	}
+
+	backtrack(0)
+	return result
+}
+```
 
 ---
 
-## 15.5 - Classic LeetCode Problems
+## 15.4 - Time & Space Complexity Analysis
+
+* **Subsets:**
+  * **Time Complexity:** $\mathcal{O}(n \cdot 2^n)$ because there are $2^n$ total subsets and copying each subset of average size $n/2$ takes $\mathcal{O}(n)$.
+  * **Space Complexity:** $\mathcal{O}(n)$ maximum depth of the recursion tree.
+* **Permutations:**
+  * **Time Complexity:** $\mathcal{O}(n \cdot n!)$.
+  * **Space Complexity:** $\mathcal{O}(n)$ call stack depth.
+
+---
+
+## 15.5 - Classic LeetCode & CLRS Benchmarks
 
 * **Subsets I & II** (LeetCode #78, #90)
 * **Permutations I & II** (LeetCode #46, #47)
 * **Combination Sum I, II & III** (LeetCode #39, #40, #216)
-* **Generate Parentheses** (LeetCode #22)
 * **N-Queens I & II** (LeetCode #51, #52)
 * **Sudoku Solver** (LeetCode #37)
 * **Word Search** (LeetCode #79)
@@ -78,7 +113,7 @@ public class SubsetsBacktracking {
 ---
 
 ## 15.6 - Sources used for this file:
-https://leetcode.com/problems/subsets/ <br>
-https://www.designgurus.io/course-play/grokking-the-coding-interview/doc/6385d47508d2bb2d978e23ca <br>
-https://www.geeksforgeeks.org/backtracking-algorithms/ <br>
-https://techinterviewhandbook.org/algorithms/recursion/
+* **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022).** *Introduction to Algorithms (4th ed.)*. MIT Press.
+  * Appendix C: Counting and Probability (Permutations and combinations pp. 1198–1207)
+* https://leetcode.com/problems/subsets/
+* https://www.geeksforgeeks.org/backtracking-algorithms/

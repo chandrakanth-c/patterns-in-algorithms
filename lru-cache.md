@@ -1,10 +1,14 @@
 # 23 - Cache Design Patterns (LRU & LFU)
 
-## 23.1 - Overview
+## 23.1 - Overview & Theoretical Foundations (CLRS Chapter 10 & 11)
 
-* **LRU (Least Recently Used) Cache:** Evicts the item that has not been accessed for the longest time when maximum capacity is reached.
-  * Achieved in $\mathcal{O}(1)$ time by combining a **Hash Map** (for $\mathcal{O}(1)$ key lookup) with a **Doubly Linked List** (for $\mathcal{O}(1)$ node addition and removal).
-* **LFU (Least Frequently Used) Cache:** Evicts the item with the minimum access frequency count.
+* A **Least Recently Used (LRU) Cache** organizes items in order of access history, evicting the least recently accessed item when capacity is exceeded.
+* **Composite Data Structure Pattern:**
+  * Direct lookup in a Doubly Linked List is $\mathcal{O}(n)$.
+  * Direct removal/reordering in a Hash Table is undefined (no sequential order).
+  * By combining a **Hash Table** (mapping `key -> Node*` in $\mathcal{O}(1)$) with a **Doubly Linked List** (performing $\mathcal{O}(1)$ node splice, insertion, and deletion), both `get` and `put` execute in strict $\mathcal{O}(1)$ worst-case time.
+* **Sentinel Nodes (CLRS 10.2):**
+  * Using dummy `head` and `tail` sentinel nodes eliminates edge cases when inserting at the boundary or removing the last remaining element.
 
 ---
 
@@ -18,7 +22,7 @@ import java.util.Map;
 
 public class LRUCache {
 
-    static class Node {
+    private static class Node {
         int key, value;
         Node prev, next;
         Node(int key, int value) {
@@ -29,7 +33,7 @@ public class LRUCache {
 
     private final int capacity;
     private final Map<Integer, Node> map;
-    private final Node head, tail; // Dummy sentinel nodes
+    private final Node head, tail; // Sentinel boundary nodes
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
@@ -43,7 +47,7 @@ public class LRUCache {
     public int get(int key) {
         if (!map.containsKey(key)) return -1;
         Node node = map.get(key);
-        moveToHead(node); // Mark as most recently used
+        moveToHead(node); // Update access recency
         return node.value;
     }
 
@@ -54,7 +58,7 @@ public class LRUCache {
             moveToHead(node);
         } else {
             if (map.size() >= capacity) {
-                // Evict LRU node from tail
+                // Evict least recently used (node before tail)
                 Node lru = tail.prev;
                 removeNode(lru);
                 map.remove(lru.key);
@@ -86,15 +90,91 @@ public class LRUCache {
 
 ---
 
-## 23.3 - Time & Space Complexity
+### Go Implementation
 
-* **`get(key)`:** $\mathcal{O}(1)$ time.
-* **`put(key, value)`:** $\mathcal{O}(1)$ time.
-* **Space Complexity:** $\mathcal{O}(\text{Capacity})$ to store elements in Hash Map and Doubly Linked List.
+```go
+package main
+
+type Node struct {
+	key, value int
+	prev, next *Node
+}
+
+type LRUCache struct {
+	capacity   int
+	cacheMap   map[int]*Node
+	head, tail *Node
+}
+
+func Constructor(capacity int) LRUCache {
+	head := &Node{}
+	tail := &Node{}
+	head.next = tail
+	tail.prev = head
+
+	return LRUCache{
+		capacity: capacity,
+		cacheMap: make(map[int]*Node),
+		head:     head,
+		tail:     tail,
+	}
+}
+
+func (c *LRUCache) Get(key int) int {
+	node, exists := c.cacheMap[key]
+	if !exists {
+		return -1
+	}
+	c.moveToHead(node)
+	return node.value
+}
+
+func (c *LRUCache) Put(key int, value int) {
+	if node, exists := c.cacheMap[key]; exists {
+		node.value = value
+		c.moveToHead(node)
+	} else {
+		if len(c.cacheMap) >= c.capacity {
+			// Evict LRU
+			lru := c.tail.prev
+			c.removeNode(lru)
+			delete(c.cacheMap, lru.key)
+		}
+		newNode := &Node{key: key, value: value}
+		c.cacheMap[key] = newNode
+		c.addNodeToHead(newNode)
+	}
+}
+
+func (c *LRUCache) addNodeToHead(node *Node) {
+	node.next = c.head.next
+	node.prev = c.head
+	c.head.next.prev = node
+	c.head.next = node
+}
+
+func (c *LRUCache) removeNode(node *Node) {
+	node.prev.next = node.next
+	node.next.prev = node.prev
+}
+
+func (c *LRUCache) moveToHead(node *Node) {
+	c.removeNode(node)
+	c.addNodeToHead(node)
+}
+```
 
 ---
 
-## 23.4 - Classic LeetCode Problems
+## 23.3 - Time & Space Complexity Analysis
+
+* **`get(key)`:** $\mathcal{O}(1)$ constant time.
+* **`put(key, value)`:** $\mathcal{O}(1)$ constant time.
+* **Space Complexity:** $\mathcal{O}(\text{Capacity})$ to maintain the Hash Table entries and doubly linked list nodes.
+
+---
+
+## 23.4 - Classic LeetCode & System Design Benchmarks
 
 * **LRU Cache** (LeetCode #146)
 * **LFU Cache** (LeetCode #460)
@@ -104,7 +184,8 @@ public class LRUCache {
 ---
 
 ## 23.5 - Sources used for this file:
-https://leetcode.com/problems/lru-cache/ <br>
-https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU <br>
-https://www.geeksforgeeks.org/lru-cache-implementation/ <br>
-https://techinterviewhandbook.org/algorithms/hash-table/
+* **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022).** *Introduction to Algorithms (4th ed.)*. MIT Press.
+  * Chapter 10: Elementary Data Structures (Doubly linked lists & Sentinels pp. 256–264)
+  * Chapter 11: Hash Tables (pp. 272–301)
+* https://leetcode.com/problems/lru-cache/
+* https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU

@@ -1,33 +1,34 @@
 # 8 - In-place Reversal of a Linked List
 
-## 8.1 - Overview
+## 8.1 - Overview & Theoretical Foundations (CLRS Chapter 10)
 
-* The **In-place Reversal of a Linked List** pattern reverses the links between nodes in a singly linked list without allocating new nodes in memory.
-* It operates directly on the existing `ListNode` pointers by keeping track of three pointers:
-  * `prev`: Reference to the previously reversed node.
-  * `curr`: Reference to the current node being reversed.
-  * `next`: Temporary reference to preserve the remaining unreversed list (`curr.next`).
+* In a singly linked list (CLRS 10.2), each node stores an element `key` and a pointer `next`.
+* Reversing the list without allocating auxiliary nodes requires iterative pointer redirection using three tracking pointers:
+  * `prev`: The head of the already reversed prefix.
+  * `curr`: The node currently being redirected.
+  * `next`: Temporary store of `curr.next` to maintain access to the unprocessed suffix.
+* **Loop Invariant:** At the start of each iteration, the sublist from original head to `prev` is completely reversed, and `curr` points to the head of the remaining forward sublist.
 
 ---
 
 ## 8.2 - Properties of a problem that suggests In-place Reversal
 
-* Need to reverse a linked list completely, between specific indices $[m, n]$, or in groups of size $k$.
-* Strict constraint: $\mathcal{O}(1)$ auxiliary space (no modifying node values, no stack allocation).
+* Need to reverse an entire linked list, a sublist between positions $L$ and $R$, or nodes in groups of $k$.
+* Strict $\mathcal{O}(1)$ auxiliary space constraint.
 
 ---
 
-## 8.3 - Classic Example: Reverse a Sub-list (Between positions left and right)
+## 8.3 - Classic Example: Reverse Sublist Between Left and Right
 
 ### Java Implementation
 
 ```java
 public class InPlaceLinkedListReversal {
 
-    static class ListNode {
-        int val;
-        ListNode next;
-        ListNode(int val) { this.val = val; }
+    public static class ListNode {
+        public int val;
+        public ListNode next;
+        public ListNode(int val) { this.val = val; }
     }
 
     public static ListNode reverseBetween(ListNode head, int left, int right) {
@@ -37,12 +38,12 @@ public class InPlaceLinkedListReversal {
         dummy.next = head;
         ListNode prev = dummy;
 
-        // 1. Skip the first (left - 1) nodes
+        // Step 1: Reach the node just before 'left'
         for (int i = 0; i < left - 1; i++) {
             prev = prev.next;
         }
 
-        // 2. Reverse sublist from left to right
+        // Step 2: Reverse sublist between left and right
         ListNode curr = prev.next;
         ListNode sublistTail = curr;
         ListNode sublistPrev = null;
@@ -54,7 +55,7 @@ public class InPlaceLinkedListReversal {
             curr = nextTemp;
         }
 
-        // 3. Connect with the rest of the list
+        // Step 3: Reconnect reversed portion with boundary nodes
         prev.next = sublistPrev;
         sublistTail.next = curr;
 
@@ -65,26 +66,72 @@ public class InPlaceLinkedListReversal {
 
 ---
 
-## 8.4 - Time & Space Complexity
+### Go Implementation
 
-* **Time Complexity:** $\mathcal{O}(n)$ because every node is visited and its pointer redirected at most once.
+```go
+package main
+
+// ListNode represents a singly linked list node
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+// ReverseBetween reverses the nodes of the list from position left to position right
+func ReverseBetween(head *ListNode, left int, right int) *ListNode {
+	if head == nil || left == right {
+		return head
+	}
+
+	dummy := &ListNode{Val: 0, Next: head}
+	prev := dummy
+
+	// Step 1: Advance prev to node at position left-1
+	for i := 0; i < left-1; i++ {
+		prev = prev.Next
+	}
+
+	// Step 2: In-place reversal of sublist
+	curr := prev.Next
+	sublistTail := curr
+	var sublistPrev *ListNode = nil
+
+	for i := 0; i < right-left+1; i++ {
+		nextTemp := curr.Next
+		curr.Next = sublistPrev
+		sublistPrev = curr
+		curr = nextTemp
+	}
+
+	// Step 3: Reconnect
+	prev.Next = sublistPrev
+	sublistTail.Next = curr
+
+	return dummy.Next
+}
+```
+
+---
+
+## 8.4 - Time & Space Complexity Analysis
+
+* **Time Complexity:** $\mathcal{O}(n)$ — Exactly $n$ pointer redirections performed in a single pass.
 * **Space Complexity:** $\mathcal{O}(1)$ auxiliary space.
 
 ---
 
-## 8.5 - Classic LeetCode Problems
+## 8.5 - Classic LeetCode Benchmarks
 
 * **Reverse Linked List** (LeetCode #206)
 * **Reverse Linked List II** (LeetCode #92)
 * **Reverse Nodes in k-Group** (LeetCode #25)
-* **Rotate List** (LeetCode #61)
 * **Reorder List** (LeetCode #143)
-* **Swapping Nodes in a Linked List** (LeetCode #1721)
+* **Palindrome Linked List** (LeetCode #234)
 
 ---
 
 ## 8.6 - Sources used for this file:
-https://leetcode.com/problems/reverse-linked-list-ii/ <br>
-https://www.designgurus.io/course-play/grokking-the-coding-interview/doc/6385d45d08d2bb2d978e22c9 <br>
-https://www.geeksforgeeks.org/reverse-a-linked-list/ <br>
-https://techinterviewhandbook.org/algorithms/linked-list/
+* **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022).** *Introduction to Algorithms (4th ed.)*. MIT Press.
+  * Chapter 10: Elementary Data Structures (Linked Lists pp. 256–264)
+* https://leetcode.com/problems/reverse-linked-list-ii/
+* https://techinterviewhandbook.org/algorithms/linked-list/

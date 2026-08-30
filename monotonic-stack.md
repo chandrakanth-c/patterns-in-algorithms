@@ -1,18 +1,22 @@
 # 9 - Monotonic Stack / Queue
 
-## 9.1 - Overview
+## 9.1 - Overview & Theoretical Foundations (CLRS Chapter 10 & 17)
 
-* A **Monotonic Stack** (or Queue) is a stack whose elements are always sorted in a strictly monotonic order (either monotonically increasing or monotonically decreasing).
-* When iterating through an array, whenever a new element violates the monotonic order, we continuously pop elements from the stack until the order is restored.
-* This property allows finding the **Next Greater Element**, **Next Smaller Element**, **Previous Greater Element**, or **Previous Smaller Element** for every element in an array in $\mathcal{O}(n)$ time.
+* A **Monotonic Stack** enforces a strict invariant: elements stored inside the stack remain monotonically increasing or monotonically decreasing from bottom to top.
+* When evaluating a new element $x$, elements that violate the monotonic invariant are popped before pushing $x$.
+* **Amortized Analysis (CLRS 17.1 - Aggregate & Accounting Method):**
+  * Let each push operation be charged 2 credits (1 credit pays for the push, 1 credit is banked on the element to pay for its eventual pop).
+  * Every element enters the stack at most once and leaves at most once.
+  * For an input sequence of length $n$, the total number of operations across the entire algorithm is upper-bounded by $2n$.
+  * Hence, the amortized cost per element is $\mathcal{O}(1)$, yielding an overall running time of $\Theta(n)$.
 
 ---
 
 ## 9.2 - Properties of a problem that suggests Monotonic Stack
 
-* Finding nearest elements that are larger/smaller than current elements.
-* Calculating bounded subsegment areas (e.g., maximum rectangle in histograms).
-* Processing stock spans, temperature increases, or trapping rainwater boundaries.
+* Finding the **Next Greater Element**, **Next Smaller Element**, **Previous Greater Element**, or **Previous Smaller Element** for every element in an array.
+* Finding contiguous boundary limits (e.g. Largest Rectangle in Histogram, Trapping Rain Water).
+* Monotonic Queue: Finding maximum/minimum in a sliding window of size $K$.
 
 ---
 
@@ -36,10 +40,9 @@ public class MonotonicStack {
         Deque<Integer> stack = new ArrayDeque<>();
 
         for (int i = 0; i < n; i++) {
-            // While current number is greater than the number represented by the top index
             while (!stack.isEmpty() && nums[i] > nums[stack.peek()]) {
                 int poppedIndex = stack.pop();
-                result[poppedIndex] = nums[i]; // Found next greater element
+                result[poppedIndex] = nums[i]; // nums[i] is the next greater element
             }
             stack.push(i);
         }
@@ -51,14 +54,45 @@ public class MonotonicStack {
 
 ---
 
-## 9.4 - Time & Space Complexity
+### Go Implementation
 
-* **Time Complexity:** $\mathcal{O}(n)$ amortized. Although there is a nested `while` loop, every element is pushed onto the stack exactly once and popped at most once across the entire iteration ($2n$ operations).
+```go
+package main
+
+// NextGreaterElement finds the next greater element for each item in nums
+func NextGreaterElement(nums []int) []int {
+	n := len(nums)
+	result := make([]int, n)
+	for i := range result {
+		result[i] = -1
+	}
+
+	// Monotonic stack storing indices
+	stack := make([]int, 0, n)
+
+	for i := 0; i < n; i++ {
+		for len(stack) > 0 && nums[i] > nums[stack[len(stack)-1]] {
+			poppedIdx := stack[len(stack)-1]
+			stack = stack[:len(stack)-1] // Pop
+			result[poppedIdx] = nums[i]
+		}
+		stack = append(stack, i) // Push
+	}
+
+	return result
+}
+```
+
+---
+
+## 9.4 - Time & Space Complexity Analysis
+
+* **Time Complexity:** $\mathcal{O}(n)$ total amortized time.
 * **Space Complexity:** $\mathcal{O}(n)$ to store indices on the stack.
 
 ---
 
-## 9.5 - Classic LeetCode Problems
+## 9.5 - Classic LeetCode & Benchmark Problems
 
 * **Daily Temperatures** (LeetCode #739)
 * **Next Greater Element I & II** (LeetCode #496, #503)
@@ -71,7 +105,8 @@ public class MonotonicStack {
 ---
 
 ## 9.6 - Sources used for this file:
-https://leetcode.com/discuss/study-guide/2347639/A-comprehensive-guide-and-template-for-monotonic-stack-based-problems <br>
-https://www.geeksforgeeks.org/introduction-to-monotonic-stack-2/ <br>
-https://techinterviewhandbook.org/algorithms/stack/ <br>
-https://labuladong.gitbook.io/algo-en/ii.-data-structure/monotonicstack
+* **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022).** *Introduction to Algorithms (4th ed.)*. MIT Press.
+  * Chapter 10: Elementary Data Structures (Stacks pp. 253–255)
+  * Chapter 17: Amortized Analysis (Aggregate and Accounting method pp. 488–496)
+* https://leetcode.com/discuss/study-guide/2347639/A-comprehensive-guide-and-template-for-monotonic-stack-based-problems
+* https://techinterviewhandbook.org/algorithms/stack/
