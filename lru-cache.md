@@ -176,10 +176,27 @@ func (c *LRUCache) moveToHead(node *Node) {
 
 ## 23.4 - Classic LeetCode & System Design Benchmarks
 
-* **LRU Cache** (LeetCode #146)
-* **LFU Cache** (LeetCode #460)
-* **Design In-Memory File System** (LeetCode #588)
-* **Design Hit Counter** (LeetCode #362)
+### 1. LRU Cache (LeetCode #146)
+* **Problem Statement**: Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Implement the `LRUCache` class with `get` and `put` methods.
+* **Solution Link**: [problems/lru-cache/lru_cache_problems.go](problems/lru-cache/lru_cache_problems.go) (`LRUCache`)
+* **Explanation**: Uses a combination of a Hash Map for $\mathcal{O}(1)$ lookup and a Doubly Linked List to maintain the order of elements based on their access recency.
+* **Conceptual Link**: Demonstrates the **Composite Data Structure Pattern**, where multiple data structures are combined to achieve optimal time complexity for different operations.
+
+### 2. LFU Cache (LeetCode #460)
+* **Problem Statement**: Design and implement a data structure for a Least Frequently Used (LFU) cache. It should support `get` and `put` operations. When the cache is full, it should evict the least frequently used item.
+* **Solution Link**: [problems/lru-cache/lru_cache_problems.go](problems/lru-cache/lru_cache_problems.go) (`LFUCache`)
+* **Explanation**: Maintains two maps: one for keys to node elements and another for frequencies to doubly linked lists of nodes with that frequency. It also tracks the `minFreq` to facilitate $\mathcal{O}(1)$ eviction.
+* **Conceptual Link**: An extension of the LRU pattern that incorporates frequency-based eviction logic using multiple linked lists.
+
+### 3. Design Hit Counter (LeetCode #362)
+* **Problem Statement**: Design a hit counter which counts the number of hits received in the past 5 minutes (i.e., the past 300 seconds).
+* **Solution Link**: [problems/lru-cache/lru_cache_problems.go](problems/lru-cache/lru_cache_problems.go) (`HitCounter`)
+* **Explanation**: Uses two arrays of size 300 to store timestamps and hit counts. The index is determined by `timestamp % 300`, effectively creating a circular buffer/sliding window.
+* **Conceptual Link**: Related to cache eviction and sliding window concepts, where data outside a certain time range is effectively "evicted" or ignored.
+
+### 4. Design In-Memory File System (LeetCode #588)
+* **Problem Statement**: Design an in-memory file system that supports basic operations like `ls`, `mkdir`, `addContentToFile`, and `readContentFromFile`.
+* **Conceptual Link**: Often involves complex tree structures and can use LRU caching for performance optimization of frequently accessed files or directories.
 
 ---
 

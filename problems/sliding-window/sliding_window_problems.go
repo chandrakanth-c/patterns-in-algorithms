@@ -111,6 +111,28 @@ func MaxConsecutiveOnes(nums []int, k int) int {
 	return maxLen
 }
 
+// NumSubarrayProductLessThanK returns the number of subarrays where the product
+// of all elements is strictly less than k (LeetCode #713).
+// Sliding window: count subarrays ending at 'right'.
+// Time: O(n), Space: O(1)
+func NumSubarrayProductLessThanK(nums []int, k int) int {
+	if k <= 1 {
+		return 0
+	}
+	count := 0
+	prod := 1
+	left := 0
+	for right := 0; right < len(nums); right++ {
+		prod *= nums[right]
+		for prod >= k {
+			prod /= nums[left]
+			left++
+		}
+		count += right - left + 1
+	}
+	return count
+}
+
 // MaxSlidingWindow returns the max value in each sliding window of size k (LeetCode #239).
 // Monotonic deque: front always holds index of the current window maximum.
 // Time: O(n), Space: O(k)

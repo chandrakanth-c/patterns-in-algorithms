@@ -137,11 +137,48 @@ func MergeKLists(lists []*ListNode) *ListNode {
 
 ## 14.5 - Classic LeetCode & CLRS Benchmarks
 
-* **K-way Merge Problem** (CLRS Exercise 6.5-9)
-* **Merge k Sorted Lists** (LeetCode #23)
-* **Kth Smallest Element in a Sorted Matrix** (LeetCode #378)
-* **Find K Pairs with Smallest Sums** (LeetCode #373)
-* **Smallest Range Covering Elements from K Lists** (LeetCode #632)
+### 14.5.1 - Merge k Sorted Lists (LeetCode #23)
+
+#### 1. Problem Statement
+You are given an array of `k` linked-lists `lists`, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.
+
+#### 2. Solution Link
+* [Go Implementation](problems/k-way-merge/k_way_merge_problems.go) (Function: `MergeKLists`)
+* [Java Implementation](k-way-merge.md) (Method: `mergeKLists`)
+
+#### 3. Explanation
+We use a Min-Heap to store the head nodes of all `k` lists. In each step, we extract the minimum node from the heap, attach it to our result list, and then push the next node from the same list into the heap. This ensures we always pick the globally smallest element among the current heads of the `k` lists.
+
+#### 4. Conceptual Link to K-way Merge
+This is the standard application of the pattern. It reduces a $K$-way comparison problem to a sequence of $\mathcal{O}(\log K)$ heap operations, optimizing the total time to $\mathcal{O}(N \log K)$.
+
+### 14.5.2 - Kth Smallest Element in a Sorted Matrix (LeetCode #378)
+
+#### 1. Problem Statement
+Given an $n \times n$ matrix where each of the rows and columns is sorted in ascending order, return the $k$-th smallest element in the matrix.
+
+#### 2. Solution Link
+* [Go Implementation](problems/k-way-merge/k_way_merge_problems.go) (Function: `KthSmallest`)
+
+#### 3. Explanation
+We can treat each row of the matrix as a sorted list. We initialize a Min-Heap with the first element of each row. We perform $k$ extractions from the heap. Whenever we extract an element `matrix[i][j]`, we insert the next element from the same row `matrix[i][j+1]` into the heap. The $k$-th extracted element is our answer.
+
+#### 4. Conceptual Link to K-way Merge
+Treats a **Sorted Matrix as K-sorted lists**. It demonstrates that the pattern isn't limited to explicit lists but applies to any structure that can be viewed as multiple sorted streams.
+
+### 14.5.3 - Smallest Range Covering Elements from K Lists (LeetCode #632)
+
+#### 1. Problem Statement
+You have `k` lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the `k` lists.
+
+#### 2. Solution Link
+* [Go Implementation](problems/k-way-merge/k_way_merge_problems.go) (Function: `SmallestRange`)
+
+#### 3. Explanation
+We maintain a Min-Heap containing one element from each of the `k` lists. We also track the maximum value currently in the heap. The current range is `[min_in_heap, max_in_heap]`. In each step, we pop the minimum element and push the next element from the same list. We update our "best range" if the new range is smaller. We stop when any list is exhausted.
+
+#### 4. Conceptual Link to K-way Merge
+This is a **Sliding Window over K-streams**. It uses the K-way merge mechanism to efficiently "slide" the window (by advancing the minimum pointer) while maintaining the property that one element from every list is present in the window.
 
 ---
 

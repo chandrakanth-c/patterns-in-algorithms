@@ -112,11 +112,32 @@ func Merge(intervals [][]int) [][]int {
 
 ## 6.5 - Classic LeetCode & CLRS Benchmarks
 
+### 1. Merge Intervals (LeetCode #56)
+* **Problem Statement**: Given an array of `intervals` where `intervals[i] = [starti, endi]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+* **Solution Link**: [problems/merge-intervals/merge_intervals_problems.go](problems/merge-intervals/merge_intervals_problems.go) (`Merge`)
+* **Explanation**: First, sort the intervals by their start times. Then, iterate through the sorted intervals, merging the current interval with the last merged interval if they overlap.
+* **Conceptual Link**: A foundational application of the **Greedy Choice Property**, where sorting ensures that we only need to compare the current interval with the most recently merged one.
+
+### 2. Insert Interval (LeetCode #57)
+* **Problem Statement**: You are given an array of non-overlapping intervals `intervals` sorted by their start times. Insert a `newInterval` into the list such that it remains sorted and non-overlapping, merging intervals if necessary.
+* **Solution Link**: [problems/merge-intervals/merge_intervals_problems.go](problems/merge-intervals/merge_intervals_problems.go) (`Insert`)
+* **Explanation**: The problem is solved in three parts: add all intervals that end before the new interval starts, merge all overlapping intervals with the new interval, and finally add all remaining intervals.
+* **Conceptual Link**: Demonstrates how to maintain interval properties (sorted, non-overlapping) during a dynamic update operation in $\mathcal{O}(n)$ time.
+
+### 3. Non-overlapping Intervals (LeetCode #435)
+* **Problem Statement**: Given an array of intervals `intervals`, return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+* **Solution Link**: [problems/merge-intervals/merge_intervals_problems.go](problems/merge-intervals/merge_intervals_problems.go) (`EraseOverlapIntervals`)
+* **Explanation**: This is equivalent to finding the maximum number of non-overlapping intervals. By sorting intervals by their end times and greedily picking the ones that finish earliest, we maximize the space for remaining intervals.
+* **Conceptual Link**: Directly maps to the **Activity-Selection Problem** from CLRS, illustrating the greedy strategy for maximizing interval counts.
+
+### 4. Meeting Rooms II (LeetCode #253)
+* **Problem Statement**: Given an array of meeting time intervals consisting of start and end times `[[s1,e1],[s2,e2],...]`, find the minimum number of conference rooms required.
+* **Solution Link**: [problems/merge-intervals/merge_intervals_problems.go](problems/merge-intervals/merge_intervals_problems.go) (`MinMeetingRooms`)
+* **Explanation**: Sort intervals by start time and use a min-heap to keep track of the end times of meetings currently in progress. If a new meeting starts after the earliest end time in the heap, we can reuse that room.
+* **Conceptual Link**: Uses a **Min-Heap** to manage resources efficiently, a common technique for solving "maximum concurrent overlap" problems.
+
 * **Activity-Selection Problem** (CLRS 15.1)
-* **Merge Intervals** (LeetCode #56)
-* **Insert Interval** (LeetCode #57)
-* **Non-overlapping Intervals** (LeetCode #435)
-* **Meeting Rooms I & II** (LeetCode #252, #253)
+* **Meeting Rooms I** (LeetCode #252)
 * **Interval List Intersections** (LeetCode #986)
 
 ---

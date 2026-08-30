@@ -109,11 +109,77 @@ func LengthOfLongestSubstringKDistinct(s string, k int) int {
 
 ## 4.5 - Classic LeetCode Benchmarks
 
-* **Longest Substring Without Repeating Characters** (LeetCode #3)
-* **Minimum Window Substring** (LeetCode #76)
-* **Longest Repeating Character Replacement** (LeetCode #424)
-* **Max Consecutive Ones III** (LeetCode #1004)
-* **Subarray Product Less Than K** (LeetCode #713)
+### 4.5.1 - Longest Substring Without Repeating Characters (LeetCode #3)
+
+#### 1. Problem Statement
+Given a string `s`, find the length of the longest substring without repeating characters.
+
+#### 2. Solution Link
+* [Go Implementation](problems/sliding-window/sliding_window_problems.go) (Function: `LengthOfLongestSubstring`)
+
+#### 3. Explanation
+The algorithm uses a map to store the last seen index of each character. As we iterate with the `right` pointer, if we encounter a character already in the map and its index is within the current window, we move the `left` pointer to `index + 1`.
+
+#### 4. Conceptual Link to Sliding Window
+This problem is a classic application of the dynamic sliding window. The window size grows as long as characters are unique and shrinks (by jumping `left`) when a duplicate is found, maintaining the "no duplicates" invariant.
+
+### 4.5.2 - Minimum Window Substring (LeetCode #76)
+
+#### 1. Problem Statement
+Given two strings `s` and `t`, return the minimum window substring of `s` such that every character in `t` (including duplicates) is included in the window. If there is no such substring, return the empty string `""`.
+
+#### 2. Solution Link
+* [Go Implementation](problems/sliding-window/sliding_window_problems.go) (Function: `MinWindow`)
+
+#### 3. Explanation
+We use two frequency maps: one for the characters required from `t` and another for the current window. We expand the `right` pointer until the window contains all characters from `t`. Then, we contract the `left` pointer as much as possible while still maintaining all characters from `t` to find the minimum length.
+
+#### 4. Conceptual Link to Sliding Window
+This illustrates a "catch-up" sliding window where the `right` pointer aggressively finds a valid state, and the `left` pointer tentatively optimizes it, searching for the minimal valid range.
+
+### 4.5.3 - Longest Repeating Character Replacement (LeetCode #424)
+
+#### 1. Problem Statement
+You are given a string `s` and an integer `k`. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most `k` times. Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+#### 2. Solution Link
+* [Go Implementation](problems/sliding-window/sliding_window_problems.go) (Function: `CharacterReplacement`)
+
+#### 3. Explanation
+We maintain a window and track the frequency of characters within it. The key invariant is that the number of replacements needed (window size minus the frequency of the most frequent character) must be $\le k$. If it exceeds $k$, we shrink the window from the left.
+
+#### 4. Conceptual Link to Sliding Window
+This problem uses the window to track a global state (max frequency). It demonstrates how sliding window can handle "allowed violations" (up to $k$ replacements) by maintaining a count of the elements that don't match the majority.
+
+### 4.5.4 - Max Consecutive Ones III (LeetCode #1004)
+
+#### 1. Problem Statement
+Given a binary array `nums` and an integer `k`, return the maximum number of consecutive `1`'s in the array if you can flip at most `k` `0`'s.
+
+#### 2. Solution Link
+* [Go Implementation](problems/sliding-window/sliding_window_problems.go) (Function: `MaxConsecutiveOnes`)
+
+#### 3. Explanation
+We expand the `right` pointer and count the number of zeros encountered. If the zero count exceeds `k`, we increment the `left` pointer until we remove a zero from the window, bringing the count back to `k`.
+
+#### 4. Conceptual Link to Sliding Window
+This is a variation of the dynamic sliding window where the "validity" of the window is determined by a resource budget ($k$ flips). The window expands to consume the budget and contracts when bankrupt.
+
+### 4.5.5 - Subarray Product Less Than K (LeetCode #713)
+
+#### 1. Problem Statement
+Given an array of integers `nums` and an integer `k`, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than `k`.
+
+#### 2. Solution Link
+* [Go Implementation](problems/sliding-window/sliding_window_problems.go) (Function: `NumSubarrayProductLessThanK`)
+
+#### 3. Explanation
+We maintain the product of elements in the current window. As `right` advances, we multiply by `nums[right]`. If the product becomes $\ge k$, we divide by `nums[left]` and increment `left`. For each valid window `[left, right]`, all subarrays ending at `right` and starting at or after `left` are valid, adding `right - left + 1` to the total count.
+
+#### 4. Conceptual Link to Sliding Window
+Instead of finding the "longest" or "shortest" window, this problem uses the window boundaries to count all valid contiguous sub-ranges. It leverages the monotonicity of the product (with positive integers) to efficiently count subarrays.
+
+### Other Benchmarks
 * **Sliding Window Maximum** (LeetCode #239)
 
 ---

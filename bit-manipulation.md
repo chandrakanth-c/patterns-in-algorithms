@@ -102,12 +102,65 @@ func FastPopcount(n uint) int {
 
 ## 20.5 - Classic LeetCode & Benchmark Problems
 
-* **Single Number I, II & III** (LeetCode #136, #137, #260)
-* **Number of 1 Bits (Hamming Weight)** (LeetCode #191)
-* **Counting Bits** (LeetCode #338)
-* **Reverse Bits** (LeetCode #190)
-* **Subsets using Bitmask** (LeetCode #78)
-* **Traveling Salesperson Problem (Bitmask DP)**
+### 20.5.1 - Single Number (LeetCode #136)
+
+#### 1. Problem Statement
+Given a non-empty array of integers `nums`, every element appears twice except for one. Find that single one.
+
+#### 2. Solution Link
+* [Go Implementation](problems/bit-manipulation/bit_manipulation_problems.go) (Function: `SingleNumber`)
+* [Java Implementation](problems/bit-manipulation/BitManipulation.java) (Method: `singleNumber`)
+
+#### 3. Explanation
+The solution utilizes the XOR bitwise operator. The XOR operator has two key properties: $x \oplus x = 0$ and $x \oplus 0 = x$. By XORing all numbers in the array, the elements that appear twice will cancel each other out ($x \oplus x = 0$), leaving only the element that appears once.
+
+#### 4. Conceptual Link to Bit Manipulation
+This is the quintessential example of the **Self-inverse / Cancellation property** of XOR. It demonstrates how bitwise operations can solve a problem in $\mathcal{O}(n)$ time and $\mathcal{O}(1)$ space that would otherwise require $\mathcal{O}(n)$ space with a hash map.
+
+### 20.5.2 - Single Number II (LeetCode #137)
+
+#### 1. Problem Statement
+Given an integer array `nums` where every element appears three times except for one, which appears exactly once. Find the single element and return it.
+
+#### 2. Solution Link
+* [Go Implementation](problems/bit-manipulation/bit_manipulation_problems.go) (Function: `SingleNumberII`)
+
+#### 3. Explanation
+This problem is solved by counting the number of set bits at each bit position. Since every number (except one) appears three times, the sum of bits at each position should be a multiple of 3. Any remainder at a position belongs to the single number. The implementation uses two bitmasks (`ones` and `twos`) to track bits that have appeared once or twice.
+
+#### 4. Conceptual Link to Bit Manipulation
+It extends the idea of state representation using bits. Instead of a simple boolean state (present or not), we track a state modulo 3 using bitwise logic gates (`AND`, `XOR`, `NOT`).
+
+### 20.5.3 - Single Number III (LeetCode #260)
+
+#### 1. Problem Statement
+Given an integer array `nums`, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.
+
+#### 2. Solution Link
+* [Go Implementation](problems/bit-manipulation/bit_manipulation_problems.go) (Function: `SingleNumberIII`)
+
+#### 3. Explanation
+1. XOR all numbers to get `xor = a ^ b`, where `a` and `b` are the unique numbers.
+2. Isolate the rightmost set bit in `xor` using `diff = xor & -xor`. This bit must be different between `a` and `b`.
+3. Partition the numbers into two groups based on this bit and XOR each group. One group will yield `a` and the other `b`.
+
+#### 4. Conceptual Link to Bit Manipulation
+Uses the **Isolate lowest set bit** trick (`x & -x`) to create a partition criteria. It demonstrates how to use a specific bit as a "filter" to separate intertwined signals.
+
+### 20.5.4 - Number of 1 Bits (LeetCode #191)
+
+#### 1. Problem Statement
+Write a function that takes the binary representation of an unsigned integer and returns the number of '1' bits it has (also known as the Hamming weight).
+
+#### 2. Solution Link
+* [Go Implementation](problems/bit-manipulation/bit_manipulation_problems.go) (Function: `HammingWeight`)
+* [Java Implementation](problems/bit-manipulation/BitManipulation.java) (Method: `countSetBits`)
+
+#### 3. Explanation
+The algorithm uses **Brian Kernighan’s trick**: `n & (n - 1)`. This operation always clears the least significant bit that is set to 1. By repeating this until `n` becomes 0, the number of iterations equals the number of set bits.
+
+#### 4. Conceptual Link to Bit Manipulation
+Demonstrates the efficiency of **Brian Kernighan’s algorithm**. Instead of checking all 32 or 64 bits, it only performs operations proportional to the number of set bits $k$, resulting in $\mathcal{O}(k)$ complexity.
 
 ---
 

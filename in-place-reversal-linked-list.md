@@ -122,11 +122,66 @@ func ReverseBetween(head *ListNode, left int, right int) *ListNode {
 
 ## 8.5 - Classic LeetCode Benchmarks
 
-* **Reverse Linked List** (LeetCode #206)
-* **Reverse Linked List II** (LeetCode #92)
-* **Reverse Nodes in k-Group** (LeetCode #25)
-* **Reorder List** (LeetCode #143)
-* **Palindrome Linked List** (LeetCode #234)
+### 8.5.1 - Reverse Linked List (LeetCode #206)
+
+#### 1. Problem Statement
+Given the `head` of a singly linked list, reverse the list, and return the reversed list.
+
+#### 2. Solution Link
+* [Go Implementation](problems/in-place-reversal-linked-list/reversal_ll_problems.go) (Function: `ReverseList`)
+
+#### 3. Explanation
+We use three pointers: `prev`, `curr`, and `next`. We iterate through the list, and for each node, we save its `next` node, point its `next` to `prev`, and then move `prev` and `curr` one step forward.
+
+#### 4. Conceptual Link to In-place Reversal
+This is the **atomic operation** of the pattern. It demonstrates how to redirect pointers in a single pass while maintaining a reference to the remaining list, achieving $\mathcal{O}(n)$ time and $\mathcal{O}(1)$ space.
+
+### 8.5.2 - Reverse Linked List II (LeetCode #92)
+
+#### 1. Problem Statement
+Given the `head` of a singly linked list and two integers `left` and `right` where `left <= right`, reverse the nodes of the list from position `left` to position `right`, and return the reversed list.
+
+#### 2. Solution Link
+* [Go Implementation](problems/in-place-reversal-linked-list/reversal_ll_problems.go) (Function: `ReverseBetween`)
+* [Java Implementation](in-place-reversal-linked-list.md) (Method: `reverseBetween`)
+
+#### 3. Explanation
+1. Traverse to the $(left-1)$-th node.
+2. Reverse the sublist from `left` to `right` using the iterative approach.
+3. Reconnect the reversed sublist with the rest of the list.
+
+#### 4. Conceptual Link to In-place Reversal
+Demonstrates the **Sublist Reversal** technique. It highlights the importance of keeping track of the nodes just before and after the sublist to maintain list integrity after the in-place operation.
+
+### 8.5.3 - Reverse Nodes in k-Group (LeetCode #25)
+
+#### 1. Problem Statement
+Given the `head` of a linked list, reverse the nodes of the list `k` at a time, and return the modified list. If the number of nodes is not a multiple of `k` left out, in the end, it should remain as it is.
+
+#### 2. Solution Link
+* [Go Implementation](problems/in-place-reversal-linked-list/reversal_ll_problems.go) (Function: `ReverseKGroup`)
+
+#### 3. Explanation
+This problem is solved by repeatedly applying sublist reversal. We first check if there are at least `k` nodes available. If so, we reverse them and then recursively call the function for the remaining list, connecting the result to the tail of the current reversed group.
+
+#### 4. Conceptual Link to In-place Reversal
+Extends the pattern to **Recursive/Iterative Grouping**. It shows how the base reversal logic can be composed to solve complex structural transformations on linked data.
+
+### 8.5.4 - Reorder List (LeetCode #143)
+
+#### 1. Problem Statement
+You are given the head of a singly linked-list. The list can be represented as: $L_0 \rightarrow L_1 \rightarrow \dots \rightarrow L_{n-1} \rightarrow L_n$. Reorder the list to be on the following form: $L_0 \rightarrow L_n \rightarrow L_1 \rightarrow L_{n-1} \rightarrow L_2 \rightarrow L_{n-2} \rightarrow \dots$
+
+#### 2. Solution Link
+* [Go Implementation](problems/in-place-reversal-linked-list/reversal_ll_problems.go) (Function: `ReorderList`)
+
+#### 3. Explanation
+1. Find the middle of the list using Fast & Slow pointers.
+2. Reverse the second half of the list in-place.
+3. Merge the two halves by alternating nodes from each.
+
+#### 4. Conceptual Link to In-place Reversal
+Demonstrates how **In-place Reversal** is a critical building block for complex list reordering. By reversing the second half, we can access nodes from the "end" of the list in forward order, allowing for a linear-time interleaving merge.
 
 ---
 

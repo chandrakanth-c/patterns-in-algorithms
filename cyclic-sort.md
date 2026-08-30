@@ -98,12 +98,62 @@ func FindDisappearedNumbers(nums []int) []int {
 
 ## 7.5 - Classic LeetCode & CLRS Benchmarks
 
-* **Counting Sort / Direct Indexing** (CLRS 8.2)
-* **Missing Number** (LeetCode #268)
-* **Find All Numbers Disappeared in an Array** (LeetCode #448)
-* **Find the Duplicate Number** (LeetCode #287)
-* **First Missing Positive** (LeetCode #41)
-* **Set Mismatch** (LeetCode #645)
+### 7.5.1 - Missing Number (LeetCode #268)
+
+#### 1. Problem Statement
+Given an array `nums` containing `n` distinct numbers in the range `[0, n]`, return the only number in the range that is missing from the array.
+
+#### 2. Solution Link
+* [Go Implementation](problems/cyclic-sort/cyclic_sort_problems.go) (Function: `MissingNumber`)
+
+#### 3. Explanation
+Since the numbers are in the range `[0, n]`, each number `v` should ideally be at index `v`. We use cyclic sort to place each number `nums[i]` at index `nums[i]`, provided `nums[i] < n`. After sorting, we scan the array; the first index `i` where `nums[i] != i` is the missing number. If all indices match, then `n` is the missing number.
+
+#### 4. Conceptual Link to Cyclic Sort
+Demonstrates **Direct Indexing**. The value of the element itself tells us exactly where it belongs in the array, allowing for $\mathcal{O}(n)$ detection without extra space.
+
+### 7.5.2 - Find All Numbers Disappeared in an Array (LeetCode #448)
+
+#### 1. Problem Statement
+Given an array `nums` of `n` integers where `nums[i]` is in the range `[1, n]`, return an array of all the integers in the range `[1, n]` that do not appear in `nums`.
+
+#### 2. Solution Link
+* [Go Implementation](problems/cyclic-sort/cyclic_sort_problems.go) (Function: `FindDisappearedNumbers`)
+* [Java Implementation](problems/cyclic-sort/CyclicSort.java) (Method: `findDisappearedNumbers`)
+
+#### 3. Explanation
+For an array of size `n` with values in `[1, n]`, the correct index for value `x` is `x - 1`. We iterate through the array and swap `nums[i]` with `nums[nums[i]-1]` until each number is at its correct index or a duplicate is found. A second pass identifies indices `i` where `nums[i] != i + 1`.
+
+#### 4. Conceptual Link to Cyclic Sort
+Illustrates handling of **duplicate entries** in the input range. Cyclic sort effectively "ignores" duplicates by leaving them in slots that belong to missing numbers.
+
+### 7.5.3 - Find the Duplicate Number (LeetCode #287)
+
+#### 1. Problem Statement
+Given an array of integers `nums` containing `n + 1` integers where each integer is in the range `[1, n]` inclusive. There is only one repeated number in `nums`, return this repeated number.
+
+#### 2. Solution Link
+* [Go Implementation](problems/cyclic-sort/cyclic_sort_problems.go) (Function: `FindDuplicate`)
+
+#### 3. Explanation
+We attempt to place each number `x` at index `x - 1`. If we encounter a number `nums[i]` that is already present at its correct target index `nums[nums[i]-1]`, and `i` is not that index, then `nums[i]` is the duplicate.
+
+#### 4. Conceptual Link to Cyclic Sort
+This problem highlights the **Pigeonhole Principle**. With `n+1` numbers in a range of `n`, at least one must be a duplicate. Cyclic sort finds it by identifying the "pigeon" that cannot find an empty "hole" because its correct hole is already occupied by an identical value.
+
+### 7.5.4 - First Missing Positive (LeetCode #41)
+
+#### 1. Problem Statement
+Given an unsorted integer array `nums`, return the smallest missing positive integer. You must implement an algorithm that runs in $\mathcal{O}(n)$ time and uses constant extra space.
+
+#### 2. Solution Link
+* [Go Implementation](problems/cyclic-sort/cyclic_sort_problems.go) (Function: `FirstMissingPositive`)
+
+#### 3. Explanation
+We use cyclic sort to place every positive integer `x` at index `x - 1` if $1 \le x \le n$. Non-positive numbers and numbers larger than `n` are ignored. After the sorting pass, the first index `i` such that `nums[i] != i + 1` indicates that `i + 1` is the smallest missing positive integer.
+
+#### 4. Conceptual Link to Cyclic Sort
+Shows how to apply the pattern to **unbounded ranges** by filtering for the relevant sub-range `[1, n]`. It is a hard-level problem that reduces to a simple linear scan after applying the cyclic sort transformation.
 
 ---
 
